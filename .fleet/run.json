@@ -1,0 +1,15 @@
+{
+    "configurations": [
+        {
+            "name": "Run Tests",
+            "type": "command",
+            "program": "suite",
+            "dependsOn": ["Make Tests"],
+        },
+        {
+            "name": "Make Tests",
+            "type": "command",
+            "program": "make",
+        },
+    ]
+}

@@ -1,0 +1,1 @@
+void zerosToTheFront(int *array, int count);
