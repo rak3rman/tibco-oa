@@ -7,16 +7,21 @@
 
 #include "zerosFront.h"
 
+using namespace std;
+
 /*
  * zerosToTheFront()
  * Moves all 0 values in the array to the front of the array.
+ * Will return and do nothing if the array or count are out
+ * of bounds. Runs in one pass and modifies the array in place.
  *
  * @param {int*} array - pointer to an array of integers
  * @param {int} count - number of elements in array
  */
 void zerosToTheFront(int *array, int count) {
   // 1. Edge case, empty array or count out of bounds
-  if (array == nullptr || count < 1) return;
+  if (array == nullptr || count < 1)
+    return;
   // 2. Loop through the array, starting at index 0
   int cursor = 0;
   int swap = 0;

@@ -6,13 +6,13 @@
  */
 
 #include "gtest/gtest.h"
-#include <bits/stdc++.h>
 #include <arpa/inet.h>
+#include <bits/stdc++.h>
 #include <thread>
 
-#include "./src/zerosFront.cpp"
 #include "./src/byteOrdering.cpp"
 #include "./src/epochParse.cpp"
+#include "./src/zerosFront.cpp"
 
 using namespace std;
 
@@ -25,11 +25,11 @@ using namespace std;
 //       results in undefined behavior
 
 TEST(zerosToTheFrontTest, emptyArrZeroCount) {
-    int *array = nullptr;
-    int count = 0;
+  int *array = nullptr;
+  int count = 0;
 
-    zerosToTheFront(array, count);
-    ASSERT_EQ(array, nullptr);
+  zerosToTheFront(array, count);
+  ASSERT_EQ(array, nullptr);
 }
 
 TEST(zerosToTheFrontTest, emptyArrPosCount) {
@@ -50,69 +50,99 @@ TEST(zerosToTheFrontTest, emptyArrNegCount) {
 
 TEST(zerosToTheFrontTest, seqArrValidCount) {
   int *array = new int[10];
-  for (int i = 0; i < 10; i++) { array[i] = i; }
+  for (int i = 0; i < 10; i++) {
+    array[i] = i;
+  }
   int count = 10;
 
   zerosToTheFront(array, count);
-  for (int i = 0; i < 10; i++) { ASSERT_EQ(array[i], i); }
+  for (int i = 0; i < 10; i++) {
+    ASSERT_EQ(array[i], i);
+  }
 
   delete[] array;
 }
 
 TEST(zerosToTheFrontTest, seqArrValidCountBig) {
   int *array = new int[10000];
-  for (int i = 0; i < 10000; i++) { array[i] = i; }
+  for (int i = 0; i < 10000; i++) {
+    array[i] = i;
+  }
   int count = 10000;
 
   zerosToTheFront(array, count);
-  for (int i = 0; i < 10000; i++) { ASSERT_EQ(array[i], i); }
+  for (int i = 0; i < 10000; i++) {
+    ASSERT_EQ(array[i], i);
+  }
 
   delete[] array;
 }
 
 TEST(zerosToTheFrontTest, seqArrUnderCount) {
   int *array = new int[10];
-  for (int i = 0; i < 10; i++) { array[i] = i; }
+  for (int i = 0; i < 10; i++) {
+    array[i] = i;
+  }
   int count = 8;
 
   zerosToTheFront(array, count);
-  for (int i = 0; i < 10; i++) { ASSERT_EQ(array[i], i); }
+  for (int i = 0; i < 10; i++) {
+    ASSERT_EQ(array[i], i);
+  }
 
   delete[] array;
 }
 
 TEST(zerosToTheFrontTest, seqRevArrValidCount) {
   int *array = new int[10];
-  for (int i = 0; i < 10; i++) { array[i] = 9 - i; }
+  for (int i = 0; i < 10; i++) {
+    array[i] = 9 - i;
+  }
   int count = 10;
 
   zerosToTheFront(array, count);
-  for (int i = 0; i < 1; i++) { ASSERT_EQ(array[i], 0); }
-  for (int i = 1; i < 10; i++) { ASSERT_NE(array[i], 0); }
+  for (int i = 0; i < 1; i++) {
+    ASSERT_EQ(array[i], 0);
+  }
+  for (int i = 1; i < 10; i++) {
+    ASSERT_NE(array[i], 0);
+  }
 
   delete[] array;
 }
 
 TEST(zerosToTheFrontTest, seqRevArrUnderCount) {
   int *array = new int[10];
-  for (int i = 0; i < 10; i++) { array[i] = 9 - i; }
+  for (int i = 0; i < 10; i++) {
+    array[i] = 9 - i;
+  }
   int count = 9;
 
   zerosToTheFront(array, count);
-  for (int i = 9; i < 10; i++) { ASSERT_EQ(array[i], 0); }
-  for (int i = 0; i < 9; i++) { ASSERT_NE(array[i], 0); }
+  for (int i = 9; i < 10; i++) {
+    ASSERT_EQ(array[i], 0);
+  }
+  for (int i = 0; i < 9; i++) {
+    ASSERT_NE(array[i], 0);
+  }
 
   delete[] array;
 }
 
 TEST(zerosToTheFrontTest, balArrValidCount) {
   int *array = new int[20];
-  for (int i = 0; i < 20; i++) { array[i] = 9 - i; }
+  for (int i = 0; i < 20; i++) {
+    array[i] = 9 - i;
+  }
   int count = 20;
 
   zerosToTheFront(array, count);
-  for (int i = 0; i < 1; i++) { ASSERT_EQ(array[i], 0); }
-  for (int i = 1; i < 20; i++) { ASSERT_NE(array[i], 0); }
+  for (int i = 0; i < 1; i++) {
+    ASSERT_EQ(array[i], 0);
+  }
+  for (int i = 1; i < 20; i++) {
+    ASSERT_NE(array[i], 0);
+  }
 
   delete[] array;
 }
@@ -120,16 +150,23 @@ TEST(zerosToTheFrontTest, balArrValidCount) {
 TEST(zerosToTheFrontTest, randArrValidCount) {
   for (int count = 0; count < 50; count++) {
     int *array = new int[count];
-    for (int i = 0; i < count; i++) { array[i] = rand() % 100 - 50; } // Picks random -50 to 50
+    for (int i = 0; i < count; i++) {
+      array[i] = rand() % 100 - 50;
+    } // Picks random -50 to 50
 
     int zeros = 0;
     for (int i = 0; i < count; i++) {
-      if (array[i] == 0) zeros++;
+      if (array[i] == 0)
+        zeros++;
     }
 
     zerosToTheFront(array, count);
-    for (int i = 0; i < zeros; i++) { ASSERT_EQ(array[i], 0); }
-    for (int i = zeros; i < count; i++) { ASSERT_NE(array[i], 0); }
+    for (int i = 0; i < zeros; i++) {
+      ASSERT_EQ(array[i], 0);
+    }
+    for (int i = zeros; i < count; i++) {
+      ASSERT_NE(array[i], 0);
+    }
 
     delete[] array;
   }
@@ -138,23 +175,99 @@ TEST(zerosToTheFrontTest, randArrValidCount) {
 TEST(zerosToTheFrontTest, randArrRandCount) {
   for (int count = 0; count < 500; count++) {
     int *array = new int[count];
-    for (int i = 0; i < count; i++) { array[i] = rand() % 100 - 50; } // Picks random -50 to 50
+    for (int i = 0; i < count; i++) {
+      array[i] = rand() % 100 - 50;
+    }                                   // Picks random -50 to 50
     int randCount = count - rand() % 5; // Redefine count
 
     int zeros = 0;
     for (int i = 0; i < randCount; i++) {
-      if (array[i] == 0) zeros++;
+      if (array[i] == 0)
+        zeros++;
     }
 
     zerosToTheFront(array, randCount);
-    for (int i = 0; i < zeros; i++) { ASSERT_EQ(array[i], 0); }
-    for (int i = zeros; i < randCount; i++) { ASSERT_NE(array[i], 0); }
+    for (int i = 0; i < zeros; i++) {
+      ASSERT_EQ(array[i], 0);
+    }
+    for (int i = zeros; i < randCount; i++) {
+      ASSERT_NE(array[i], 0);
+    }
 
     delete[] array;
   }
 }
 
+/* **************************************************
+ * my_ntohs()
+ * *************************************************/
+
+TEST(myNtohsShortTest, binarySimple) {
+  unsigned short in = 0b0000000000000000;
+  ASSERT_EQ(my_ntohs(in), 0b0000000000000000);
+
+  in = 0b0011001100110011;
+  ASSERT_EQ(my_ntohs(in), 0b0011001100110011);
+
+  in = 0b0000000011111111;
+  ASSERT_EQ(my_ntohs(in), 0b1111111100000000);
+
+  in = 0b1100000000000011;
+  ASSERT_EQ(my_ntohs(in), 0b0000001111000000);
+
+  in = 0x0102;
+  ASSERT_EQ(my_ntohs(in), 0x0201);
+
+  in = 0xF00F;
+  ASSERT_EQ(my_ntohs(in), 0x0FF0);
+}
+
+TEST(myNtohsShortTest, binarySimpleReverse) {
+  unsigned short in = 0x0102;
+  ASSERT_EQ(my_ntohs(in), 0x0201);
+  ASSERT_EQ(htons(my_ntohs(in)), 0x0102);
+  ASSERT_EQ(my_ntohs(my_ntohs(in)), 0x0102);
+
+  in = 0xF00F;
+  ASSERT_EQ(my_ntohs(in), 0x0FF0);
+  ASSERT_EQ(htons(my_ntohs(in)), 0xF00F);
+  ASSERT_EQ(my_ntohs(my_ntohs(in)), 0xF00F);
+}
+
+TEST(myNtohsShortTest, exhaustive) {
+  for (unsigned short i = 0; i < 0b1111111111111111; i += 0b1) {
+    ASSERT_EQ(my_ntohs(i), ntohs(i));
+  }
+}
+
+/* **************************************************
+ * my_ntohl()
+ * *************************************************/
+
+TEST(myNtohlIntTest, binarySimple) {
+  unsigned int in = 0b00000000000000000000000000000000;
+  ASSERT_EQ(my_ntohl(in), 0b00000000000000000000000000000000);
+
+  in = 0b00110011001100110011001100110011;
+  ASSERT_EQ(my_ntohl(in), 0b00110011001100110011001100110011);
+
+  in = 0b00000000000000001111111111111111;
+  ASSERT_EQ(my_ntohl(in), 0b11111111111111110000000000000000);
+
+  in = 0x99887766;
+  ASSERT_EQ(my_ntohl(in), 0x66778899);
+
+  in = 0x01FF01FF;
+  ASSERT_EQ(my_ntohl(in), 0xFF01FF01);
+}
+
+TEST(myNtohlIntTest, exhaustive) {
+  for (unsigned int i = 0; i < 0b1111111111111111; i += 0b1) {
+    ASSERT_EQ(my_ntohl(i), ntohl(i));
+  }
+}
+
 int main(int argc, char **argv) {
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
 }
