@@ -227,10 +227,10 @@ TEST(myNtohsShortTest, binarySimpleReverse) {
   ASSERT_EQ(htons(my_ntohs(in)), 0x0102);
   ASSERT_EQ(my_ntohs(my_ntohs(in)), 0x0102);
 
-  in = 0xF00F;
-  ASSERT_EQ(my_ntohs(in), 0x0FF0);
-  ASSERT_EQ(htons(my_ntohs(in)), 0xF00F);
-  ASSERT_EQ(my_ntohs(my_ntohs(in)), 0xF00F);
+  in = 0b1100000000000011;
+  ASSERT_EQ(my_ntohs(in), 0b0000001111000000);
+  ASSERT_EQ(htons(my_ntohs(in)), 0b1100000000000011);
+  ASSERT_EQ(my_ntohs(my_ntohs(in)), 0b1100000000000011);
 }
 
 TEST(myNtohsShortTest, exhaustive) {
@@ -270,7 +270,7 @@ TEST(myNtohlIntTest, exhaustive) {
  * getHMS()
  * *************************************************/
 
-TEST(getHMSTest, simple) {
+TEST(getHMSTest, simpleDefined) {
   time_t epoch = 0;
   int hour, min, sec;
 
@@ -292,12 +292,22 @@ TEST(getHMSTest, simple) {
   ASSERT_EQ(hour, 0);
 }
 
-TEST(getHMSTest, monthExhaustion) {
+TEST(getHMSTest, simpleNow) {
+  time_t epoch = time(0);
+  int hour, min, sec;
+
+  getHMS(epoch, &hour, &min, &sec);
+  ASSERT_EQ(sec, gmtime(&epoch)->tm_sec);
+  ASSERT_EQ(min, gmtime(&epoch)->tm_min);
+  ASSERT_EQ(hour, gmtime(&epoch)->tm_hour);
+}
+
+TEST(getHMSTest, twoMonthLeapExhaustion) {
   time_t epoch;
   int hour, min, sec;
 
-  // Try every second from 01/01/2000 to 02/01/2000
-  for (int i = 946684800; i < 949363200; i++) {
+  // Try every second from 01/01/2012 to 03/01/2012
+  for (int i = 1325376000; i < 1330560000; i++) {
     epoch = i;
     getHMS(epoch, &hour, &min, &sec);
     ASSERT_EQ(sec, gmtime(&epoch)->tm_sec);
@@ -310,8 +320,8 @@ TEST(getHMSTest, thirtyYearExhaustion) {
   time_t epoch;
   int hour, min, sec;
 
-  // Try random seconds from 01/01/1970 to 01/01/2000, random increments
-  for (int i = 1; i < 946684800; i += rand() % 10000) {
+  // Try random seconds from 01/01/1970 to 01/01/2012, random increments
+  for (int i = 1; i < 1325376000; i += rand() % 10000) {
     epoch = i;
     getHMS(epoch, &hour, &min, &sec);
     ASSERT_EQ(sec, gmtime(&epoch)->tm_sec);
@@ -324,7 +334,7 @@ TEST(getHMSTest, thirtyYearExhaustion) {
  * getDayOfWeek()
  * *************************************************/
 
-TEST(getDayOfWeekTest, simple) {
+TEST(getDayOfWeekTest, simpleDefined) {
   time_t epoch = 0;
 
   ASSERT_EQ(getDayOfWeek(epoch), 4);
@@ -336,12 +346,17 @@ TEST(getDayOfWeekTest, simple) {
   ASSERT_EQ(getDayOfWeek(epoch), 3);
 }
 
-TEST(getDayOfWeekTest, monthExhaustion) {
+TEST(getDayOfWeekTest, simpleNow) {
+  time_t epoch = time(0);
+  ASSERT_EQ(getDayOfWeek(epoch), gmtime(&epoch)->tm_wday);
+}
+
+TEST(getDayOfWeekTest, twoMonthLeapExhaustion) {
   time_t epoch;
   int hour, min, sec;
 
-  // Try every second from 01/01/2000 to 02/01/2000
-  for (int i = 946684800; i < 949363200; i++) {
+  // Try every second from 01/01/2012 to 03/01/2012
+  for (int i = 1325376000; i < 1330560000; i++) {
     epoch = i;
     ASSERT_EQ(getDayOfWeek(epoch), gmtime(&epoch)->tm_wday);
   }
@@ -351,8 +366,8 @@ TEST(getDayOfWeekTest, thirtyYearExhaustion) {
   time_t epoch;
   int hour, min, sec;
 
-  // Try random seconds from 01/01/1970 to 01/01/2000, random increments
-  for (int i = 1; i < 946684800; i += rand() % 10000) {
+  // Try random seconds from 01/01/1970 to 01/01/2012, random increments
+  for (int i = 1; i < 1325376000; i += rand() % 10000) {
     epoch = i;
     ASSERT_EQ(getDayOfWeek(epoch), gmtime(&epoch)->tm_wday);
   }
@@ -362,7 +377,7 @@ TEST(getDayOfWeekTest, thirtyYearExhaustion) {
  * getTime()
  * *************************************************/
 
-TEST(getTimeTest, simple) {
+TEST(getTimeTest, simpleDefined) {
   time_t epoch = 0;
   ASSERT_EQ(getTime(0, 0, 1970, 0, 0, 0), epoch);
 
@@ -376,12 +391,20 @@ TEST(getTimeTest, simple) {
   ASSERT_EQ(getTime(2, 27, 2023, 6, 0, 0), epoch);
 }
 
-TEST(getTimeTest, monthExhaustion) {
+TEST(getTimeTest, simpleNow) {
+  time_t epoch = time(0);
+  ASSERT_EQ(getTime(gmtime(&epoch)->tm_mon, gmtime(&epoch)->tm_mday - 1,
+                    gmtime(&epoch)->tm_year + 1900, gmtime(&epoch)->tm_hour,
+                    gmtime(&epoch)->tm_min, gmtime(&epoch)->tm_sec),
+            epoch);
+}
+
+TEST(getTimeTest, twoMonthLeapExhaustion) {
   time_t epoch;
   int hour, min, sec;
 
-  // Try every second from 01/01/2000 to 02/01/2000
-  for (int i = 946684800; i < 949363200; i++) {
+  // Try every second from 01/01/2012 to 03/01/2012
+  for (int i = 1325376000; i < 1330560000; i++) {
     epoch = i;
     ASSERT_EQ(getTime(gmtime(&epoch)->tm_mon, gmtime(&epoch)->tm_mday - 1,
                       gmtime(&epoch)->tm_year + 1900, gmtime(&epoch)->tm_hour,
@@ -394,8 +417,8 @@ TEST(getTimeTest, thirtyYearExhaustion) {
   time_t epoch;
   int hour, min, sec;
 
-  // Try random seconds from 01/01/1970 to 01/01/2000, random increments
-  for (int i = 1; i < 946684800; i += rand() % 10000) {
+  // Try random seconds from 01/01/1970 to 01/01/2012, random increments
+  for (int i = 1; i < 1325376000; i += rand() % 10000) {
     epoch = i;
     ASSERT_EQ(getTime(gmtime(&epoch)->tm_mon, gmtime(&epoch)->tm_mday - 1,
                       gmtime(&epoch)->tm_year + 1900, gmtime(&epoch)->tm_hour,
@@ -403,6 +426,8 @@ TEST(getTimeTest, thirtyYearExhaustion) {
               epoch);
   }
 }
+
+/***************************************************/
 
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
