@@ -8,6 +8,7 @@
 #include "gtest/gtest.h"
 #include <arpa/inet.h>
 #include <bits/stdc++.h>
+#include <ctime>
 #include <thread>
 
 #include "./src/byteOrdering.cpp"
@@ -264,6 +265,144 @@ TEST(myNtohlIntTest, binarySimple) {
 TEST(myNtohlIntTest, exhaustive) {
   for (unsigned int i = 0; i < 0b1111111111111111; i += 0b1) {
     ASSERT_EQ(my_ntohl(i), ntohl(i));
+  }
+}
+
+/* **************************************************
+ * getHMS()
+ * *************************************************/
+
+TEST(getHMSTest, simple) {
+  time_t epoch = 0;
+  int hour, min, sec;
+
+  getHMS(epoch, &hour, &min, &sec);
+  ASSERT_EQ(sec, 0);
+  ASSERT_EQ(min, 0);
+  ASSERT_EQ(hour, 0);
+
+  epoch = 3601;
+  getHMS(epoch, &hour, &min, &sec);
+  ASSERT_EQ(sec, 1);
+  ASSERT_EQ(min, 0);
+  ASSERT_EQ(hour, 1);
+
+  epoch = 120;
+  getHMS(epoch, &hour, &min, &sec);
+  ASSERT_EQ(sec, 0);
+  ASSERT_EQ(min, 2);
+  ASSERT_EQ(hour, 0);
+}
+
+TEST(getHMSTest, monthExhaustion) {
+  time_t epoch;
+  int hour, min, sec;
+
+  // Try every second from 01/01/2000 to 02/01/2000
+  for (int i = 946684800; i < 949363200; i++) {
+    epoch = i;
+    getHMS(epoch, &hour, &min, &sec);
+    ASSERT_EQ(sec, gmtime(&epoch)->tm_sec);
+    ASSERT_EQ(min, gmtime(&epoch)->tm_min);
+    ASSERT_EQ(hour, gmtime(&epoch)->tm_hour);
+  }
+}
+
+TEST(getHMSTest, thirtyYearExhaustion) {
+  time_t epoch;
+  int hour, min, sec;
+
+  // Try random seconds from 01/01/1970 to 01/01/2000, random increments
+  for (int i = 1; i < 946684800; i += rand() % 10000) {
+    epoch = i;
+    getHMS(epoch, &hour, &min, &sec);
+    ASSERT_EQ(sec, gmtime(&epoch)->tm_sec);
+    ASSERT_EQ(min, gmtime(&epoch)->tm_min);
+    ASSERT_EQ(hour, gmtime(&epoch)->tm_hour);
+  }
+}
+
+/* **************************************************
+ * getDayOfWeek()
+ * *************************************************/
+
+TEST(getDayOfWeekTest, simple) {
+  time_t epoch = 0;
+
+  ASSERT_EQ(getDayOfWeek(epoch), 4);
+
+  epoch = 60 * 60 * 24; // Plus one day
+  ASSERT_EQ(getDayOfWeek(epoch), 5);
+
+  epoch = 60 * 60 * 24 * 7 - 1; // Plus one week minus one sec
+  ASSERT_EQ(getDayOfWeek(epoch), 3);
+}
+
+TEST(getDayOfWeekTest, monthExhaustion) {
+  time_t epoch;
+  int hour, min, sec;
+
+  // Try every second from 01/01/2000 to 02/01/2000
+  for (int i = 946684800; i < 949363200; i++) {
+    epoch = i;
+    ASSERT_EQ(getDayOfWeek(epoch), gmtime(&epoch)->tm_wday);
+  }
+}
+
+TEST(getDayOfWeekTest, thirtyYearExhaustion) {
+  time_t epoch;
+  int hour, min, sec;
+
+  // Try random seconds from 01/01/1970 to 01/01/2000, random increments
+  for (int i = 1; i < 946684800; i += rand() % 10000) {
+    epoch = i;
+    ASSERT_EQ(getDayOfWeek(epoch), gmtime(&epoch)->tm_wday);
+  }
+}
+
+/* **************************************************
+ * getTime()
+ * *************************************************/
+
+TEST(getTimeTest, simple) {
+  time_t epoch = 0;
+  ASSERT_EQ(getTime(0, 0, 1970, 0, 0, 0), epoch);
+
+  epoch = 60 * 60 * 24; // Plus one day
+  ASSERT_EQ(getTime(0, 1, 1970, 0, 0, 0), epoch);
+
+  epoch = 60 * 60 * 24 * 7 - 1; // Plus one week minus one sec
+  ASSERT_EQ(getTime(0, 6, 1970, 23, 59, 59), epoch);
+
+  epoch = 1679983200; // 2/27/23, 6:00:00
+  ASSERT_EQ(getTime(2, 27, 2023, 6, 0, 0), epoch);
+}
+
+TEST(getTimeTest, monthExhaustion) {
+  time_t epoch;
+  int hour, min, sec;
+
+  // Try every second from 01/01/2000 to 02/01/2000
+  for (int i = 946684800; i < 949363200; i++) {
+    epoch = i;
+    ASSERT_EQ(getTime(gmtime(&epoch)->tm_mon, gmtime(&epoch)->tm_mday - 1,
+                      gmtime(&epoch)->tm_year + 1900, gmtime(&epoch)->tm_hour,
+                      gmtime(&epoch)->tm_min, gmtime(&epoch)->tm_sec),
+              epoch);
+  }
+}
+
+TEST(getTimeTest, thirtyYearExhaustion) {
+  time_t epoch;
+  int hour, min, sec;
+
+  // Try random seconds from 01/01/1970 to 01/01/2000, random increments
+  for (int i = 1; i < 946684800; i += rand() % 10000) {
+    epoch = i;
+    ASSERT_EQ(getTime(gmtime(&epoch)->tm_mon, gmtime(&epoch)->tm_mday - 1,
+                      gmtime(&epoch)->tm_year + 1900, gmtime(&epoch)->tm_hour,
+                      gmtime(&epoch)->tm_min, gmtime(&epoch)->tm_sec),
+              epoch);
   }
 }
 
