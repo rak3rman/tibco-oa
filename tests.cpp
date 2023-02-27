@@ -8,8 +8,6 @@
 #include "gtest/gtest.h"
 #include <arpa/inet.h>
 #include <bits/stdc++.h>
-#include <ctime>
-#include <thread>
 
 #include "./src/byteOrdering.cpp"
 #include "./src/epochParse.cpp"
