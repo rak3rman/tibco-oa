@@ -7,8 +7,6 @@
 
 #include "byteOrdering.h"
 
-using namespace std;
-
 /*
  * my_ntohs()
  * Network to host short. Converts a short value from "network"

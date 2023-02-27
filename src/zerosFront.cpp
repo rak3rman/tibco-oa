@@ -7,8 +7,6 @@
 
 #include "zerosFront.h"
 
-using namespace std;
-
 /*
  * zerosToTheFront()
  * Moves all 0 values in the array to the front of the array.

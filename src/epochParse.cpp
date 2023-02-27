@@ -6,10 +6,7 @@
  */
 
 #include "epochParse.h"
-#include <sys/_types/_time_t.h>
 #include <time.h>
-
-using namespace std;
 
 /*
  * getHMS()
@@ -55,14 +52,14 @@ int getDayOfWeek(time_t curTime) {
  * getTime()
  * Returns a time_t epoch constructed from a given month, day, year,
  * hour, min, sec. Does not account for inputs that are before
- * Jan 1st, 1970. Accounts for leap years.
+ * Jan 1st, 1970, malformed, or time zones. Accounts for leap years.
  *
- * @param {int} month - given month
- * @param {int} day - given day
- * @param {int} year - given year
- * @param {int} hour - given hour
- * @param {int} min - given min
- * @param {int} sec - given sec
+ * @param {int} month - given month, 0 based
+ * @param {int} day - given day, 0 based
+ * @param {int} year - given year, AD based
+ * @param {int} hour - given hour, 0 based military time
+ * @param {int} min - given min, 0 based
+ * @param {int} sec - given sec, 0 based
  * @returns {time_t} - a time_t object constructed from month, day, year,
  *                     hour, min, sec
  */

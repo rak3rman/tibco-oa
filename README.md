@@ -17,7 +17,7 @@ make && ./suite
 ```
 
 ## Structure
-All source code is available in the `~/src~` folder, including header files.
+All source code is available in the `~/src` folder, including header files.
 Here are a few key files to be aware of:
 
 - `src/byteOrdering.cpp` Byte Ordering
