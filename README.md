@@ -46,6 +46,7 @@ Therefore, my_ntohs() achieves the same effect as "htons()" would.
 This is proven on line 227 (sample line 2) and 228 (sample line 3) in the test cases, wrapping my_ntohs() in itself returns the same as htons() wrapped around my_ntohs (network -> host -> network).
 
 > The functions are declared as unsigned above, is this important? What if they aren't declared that way?
+
 Delaring the functions as unsigned is incredibly important (in most cases).
 Keep in mind that marking an int or short or any number as negative or positive requires storing that distinction and shifts the representation of those numbers (if we had unsigned range 0 to 100, now it could be -50 to 50).
 Typically this distinction can have a huge effect on the binary representation of a number, say two's complement for example.
