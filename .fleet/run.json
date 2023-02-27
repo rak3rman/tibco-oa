@@ -3,8 +3,8 @@
         {
             "name": "Run Tests",
             "type": "command",
-            "program": "suite",
-            "dependsOn": ["Make Tests"],
+            "program": "./suite",
+            "dependsOn": ["Make Tests"]
         },
         {
             "name": "Make Tests",
